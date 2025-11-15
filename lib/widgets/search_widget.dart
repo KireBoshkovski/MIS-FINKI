@@ -16,8 +16,6 @@ class _SearchBarState<T> extends State<SearchBarWidget<T>> {
   bool _isSearching = false;
 
   void _handleSearch(String query) async {
-    if (query.isEmpty) return widget.onResults([]);
-
     setState(() => _isSearching = true);
 
     try {

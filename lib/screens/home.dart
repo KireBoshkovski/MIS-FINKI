@@ -17,6 +17,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final Service _service = Service();
+  late List<Category> _categories;
   late List<Category> _filteredCategories;
   bool _isLoading = true;
 
@@ -57,10 +58,15 @@ class _MyHomePageState extends State<MyHomePage> {
           : Column(
               children: [
                 SearchBarWidget<Category>(
-                  onSearch: (query) async => (await _service.loadCategories())
-                      .where((c) =>
-                          c.name.toLowerCase().contains(query.toLowerCase()))
-                      .toList(),
+                  onSearch: (query) async {
+                    if (query.isEmpty) {
+                      return _categories;
+                    }
+                    return _categories
+                        .where((c) =>
+                            c.name.toLowerCase().contains(query.toLowerCase()))
+                        .toList();
+                  },
                   onResults: (results) {
                     setState(() => _filteredCategories = results);
                   },
@@ -100,6 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     setState(() {
       _filteredCategories = categoryList;
+      _categories = categoryList;
       _isLoading = false;
     });
   }
